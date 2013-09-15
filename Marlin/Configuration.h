@@ -71,7 +71,9 @@
                                                   // V2 of 3DR = 153mm rods
 
 // Horizontal offset from middle of printer to smooth rod center.
-#define DELTA_SMOOTH_ROD_OFFSET 112.5 // mm       // Tried 111.5 still high in the middle and low at the ends - Was 172.0 mm
+#define DELTA_SMOOTH_ROD_OFFSET 111.9 // mm         // For 3DR Version 2 - this number was lowered a little - to stop the hotend diging into the model.
+                                                  // 3DR Version 1 = 112.5mm
+                                                  // Tried 111.5 still high in the middle and low at the ends - Was 172.0 mm
                                                   // Lowering this number makes the hot-end raise in the middle at 109.5 it was too high
                                                   // at 110.5 the outside rings were good
                                                   // Testing middle at 111 = very slightly High Outer rings = perfect
@@ -186,9 +188,21 @@
 // Kd: 50.87
 
 // 3DR - RichRap
-    #define  DEFAULT_Kp 12.83
-    #define  DEFAULT_Ki 0.81
-    #define  DEFAULT_Kd 50.87
+//    #define  DEFAULT_Kp 12.83
+//    #define  DEFAULT_Ki 0.81
+//    #define  DEFAULT_Kd 50.87
+// Above settings for 3DR - Jhead 0.35mm and 20w Heat cartridge limited PWM
+
+// For RichRap V2 3DR Machine - with Dual feed head
+// bias: 102 d: 87 min: 147.00 max: 153.04
+// Ku: 36.66 Tu: 31.85
+// Clasic PID
+// Kp: 22.00
+// Ki: 1.38
+// Kd: 87.57
+    #define  DEFAULT_Kp 22.00
+    #define  DEFAULT_Ki 1.38
+    #define  DEFAULT_Kd 87.57
 // Above settings for 3DR - Jhead 0.35mm and 20w Heat cartridge limited PWM
 
 
@@ -338,7 +352,8 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 // For deltabots this means top and center of the cartesian print volume.
 #define MANUAL_X_HOME_POS 0
 #define MANUAL_Y_HOME_POS 0
-#define MANUAL_Z_HOME_POS 195  // For V2 = with 3mm bed and 1 layer of Blue tape = 195mm
+#define MANUAL_Z_HOME_POS 187.5     // For V2 = WithDual Feed RichRap Hot-End = 187.6mm - with Dibond bed and single layer of blue tape
+                                  // For V2 = with 3mm bed and 1 layer of Blue tape = 195mm - using a J-head
                                   // For V1 3DR Below
                                   // was 211 - Distance between nozzle and print surface after homing. The 0.5mm was added after carefull leveling and adjustments.
                                  // 211.5 = with a 2.64mm wooden base + Blue tape
@@ -350,24 +365,37 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 
 // default settings
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {55.5, 55.5, 55.5, 166}      //esteps were 111 for X,Y,Z and 1620  -RichRap Gregs 1.75mm and 8 step = 270 (270 too much for PLA / 235 is great for most parts but 225 looks better with pots and cups)
-                                                                   // after changing the nozzle size to 0.35mm rather than 0.3mm a setting of near 180 is better for PLA
-                                                                   // still need to calibrate for Nylon.
-                                                                   // Nylon and PLA 1.75mm are good at 166
-                                                                   //
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {55.5, 55.5, 55.5, 120}     // Regardless of calculations 120 is a good figure here for main at x4 and injector at x16
+
+                                                                  // Dual one at X4 and the other at X16
+                                                                  // When Using Dual Extruder Stepers and both set to x8 use half value = 80
+                                                                  // 1/4 of the 16step value (160/4 = 40) + 3/4 of 4step value (80/4) *3 = 60 (60+40/2 = 50) - Seems to need a bit more than 50 and 55 or 60, trying 70
+                                                                  // If setup with Dual fed extruders but one at x16 and one at X4, then calculate volume as - 60?
+                                                                  // Dual at x16 half volume value would be = 160
+                                                                  // Dual at x4 half volume would be = 20
+                                                                  // When Using x4 microsteps single would be = 80
+                                                                  // When Using x16 microsteps single would be = 320
+                                                                  // normally a single extruder is set to be x8 microsteps = 160
+                                                                  // estep was 166 for 3DR V1 / for V2 with Dual hot-end and RepRap world Hobbed Bolt use 155
+                                                                  // esteps were 111 for X,Y,Z and 1620  -RichRap Gregs 1.75mm and 8 step = 270 (270 too much for PLA / 235 is great for most parts but 225 looks better with pots and cups)
+                                                                  // after changing the nozzle size to 0.35mm rather than 0.3mm a setting of near 180 is better for PLA
+                                                                  // still need to calibrate for Nylon.
+                                                                  // Nylon and PLA 1.75mm are good at 166
+                                                                  //
                                                                    
 #define DEFAULT_MAX_FEEDRATE          {380, 380, 380, 29}      // (mm/sec) 16 was slow, 19 was too fast for 1.2A NEMA17 28 was fine for 2.5A NEMA 17 // RichRap was set to 200, 200, 200, 12
                                                                // Test setting for V1 worked well at {280, 280, 280, 29} 
                                                               
-#define DEFAULT_MAX_ACCELERATION      {500, 500, 500, 380}    // X, Y, Z, E maximum start speed for accelerated moves. //200 was slow, 400 was too fast
+#define DEFAULT_MAX_ACCELERATION      {500, 500, 500, 380}    // V1 was 500,500,500,380 / V2 lowered 
+                                                               // X, Y, Z, E maximum start speed for accelerated moves. //200 was slow, 400 was too fast
                                                               // Test setting for V1 worked well at {400, 400, 400, 280} 
 
-#define DEFAULT_ACCELERATION          380   // using 380 - (300 was ok, originally 400 ) X, Y, Z and E max acceleration in mm/s^2 for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  380   // using 380 - (300 was ok, originally 400 ) X, Y, Z and E max acceleration in mm/s^2 for r retracts
+#define DEFAULT_ACCELERATION          380   // V1 was 380 / using 380 - (300 was ok, originally 400 ) X, Y, Z and E max acceleration in mm/s^2 for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  380   // V1 was 380 / using 380 - (300 was ok, originally 400 ) X, Y, Z and E max acceleration in mm/s^2 for r retracts
 
 //
-#define DEFAULT_XYJERK                20.0   // (mm/sec)
-#define DEFAULT_ZJERK                 20.0   // (mm/sec)
+#define DEFAULT_XYJERK                20.0   // (mm/sec)  V1 was 20 / now using 18 for V2
+#define DEFAULT_ZJERK                 20.0   // (mm/sec)  V1 was 20 / now using 18 for V2
 #define DEFAULT_EJERK                 15   // (mm/sec)    // was 12 (8 was too slow) 12 was ok
 
 //===========================================================================
@@ -404,7 +432,7 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 #endif
 
 // Preheat Constants
-#define PLA_PREHEAT_HOTEND_TEMP 180
+#define PLA_PREHEAT_HOTEND_TEMP 205            // was 180 for 3DR V1
 #define PLA_PREHEAT_HPB_TEMP 0
 #define PLA_PREHEAT_FAN_SPEED 255		// Insert Value between 0 and 255
 

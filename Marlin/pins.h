@@ -1021,7 +1021,7 @@
 
 #define E1_STEP_PIN        26
 #define E1_DIR_PIN         25
-#define E1_ENABLE_PIN      27
+#define E1_ENABLE_PIN      7			// NORMALLY THIS PIN IS 27 - BUT IF USING MIXER AND pwm-ENABLED FAN CONTROL MAKE IT 7
 
 #define E2_STEP_PIN        29
 #define E2_DIR_PIN         28
@@ -1029,7 +1029,7 @@
 
 #define LED_PIN            13
 
-#define FAN_PIN            7
+#define FAN_PIN            27			// NORMALLY THIS PIN IS 7 - BUT IF USING MIXER AND pwm-ENABLED FAN CONTROL MAKE IT 27
 //additional FAN1 PIN (e.g. useful for electronics fan or light on/off) on PIN 8
 
 #define PS_ON_PIN          45
