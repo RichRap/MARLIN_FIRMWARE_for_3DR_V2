@@ -303,7 +303,7 @@ const bool X_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 const bool Y_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops.    //Richrap changed from false
 const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops.    //Richrap changed from false
 //#define DISABLE_MAX_ENDSTOPS
-
+#define DISABLE_MIN_ENDSTOPS
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 #define X_ENABLE_ON 0
